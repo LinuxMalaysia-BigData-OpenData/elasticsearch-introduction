@@ -18,11 +18,11 @@ If you are running an ElasticSearch Usergroup, consider using this presentation 
 
 If you want to collaborate more often, just file an issue for giving you commit access.
 
-## License
+## Presentation License
 
 This presentation is subject to the Creative Commons Attribution 4.0 International  http://creativecommons.org/licenses/by/4.0/ unless otherwise noted (e.g. pictures).
 
-Shower and Jekyller components are MIT.
+Shower and Jekyller licenses can be found [here](#credits-and-license).
 
 ## Install
 
