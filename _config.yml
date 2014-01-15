@@ -16,6 +16,6 @@ author:
         name: asquera GmbH
         # url:  http://example.com/
 
-fork_url: https://github.com/shower/shower
+fork_url: https://github.com/skade/elasticsearch-introduction
 progress: true
 line_numbers: true

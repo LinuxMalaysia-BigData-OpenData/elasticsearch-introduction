@@ -1,6 +1,6 @@
 ---
 
-layout: ribbon
+layout: bright
 
 style: |
 
@@ -38,7 +38,7 @@ style: |
 
 ## What is ElasticSearch?
 
-* A modern, distributed search engine
+* A modern, distributed search engine based on [Apache Lucene](http://lucene.apache.org)
 * A distributed aggregation engine
 * A database excelling at unstructured data like text
 
@@ -57,10 +57,11 @@ style: |
 ## Your First Data
 
     {
+      "id": 123,
       "name": "Florian Gilcher",
       "place": "Berlin",
       "birthdate": "1983-10-04T00:00:00+01:00",
-      "interests": ["coding", "data", "elasticsearch"],
+      "interests": ["code", "data", "elasticsearch"],
       "age": 30
     }
 
@@ -73,6 +74,16 @@ ElasticSearch handles:
 * Complex types: Objects, Arrays, Geo-Locations, IP-Adresses...
 
 [Reference](http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/mapping-types.html)
+
+## Index
+
+Let's put the stuff in the database.
+
+    $ export $HOST=http://localhost:9200
+    $ curl -XPOST $HOST/my_index/person/123 -d @person.json
+    {"ok":true,"_index":"my_index","_type":"person","_id":"123","_version":1}
+
+This operation is part of the [Document API](http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/docs.html) and is called "Index".
 
 ## Photo Credit
 

@@ -1,10 +1,28 @@
-# Jekyller [![Build Status][build]][build-link]
-[build]: https://travis-ci.org/shower/jekyller.png?branch=gh-pages
-[build-link]: https://travis-ci.org/shower/jekyller
+# elasticsearch-introduction 
 
-This is a generator for the [Shower HTML presentation engine](https://github.com/shower/shower).
+This is a short introduction to ElasticSearch, based on the [shower](http://github.com/shower/shower) and [jekyller](http://github.com/shower/jekyller) projects.
 
-It takes your markdown document and transforms it into the Shower slides. Almost all the things are transformed smoothly, however there could be some things you could configure, either in the YAML front matter or using some extra special formatting.
+The introduction is intended to be used for introducing new people to ElasticSearch at the [ElasticSearch Usergroup Berlin](http://www.meetup.com/ElasticSearch-UG-Berlin/).
+
+## Short-term Goals
+
+This presentation shouldn't give deep insight. It is more meant as a short introduction to what ElasticSearch does in general. It should also give newcomers pointers to important parts of the database that are sometimes neglected and should not be glossed over.
+
+## Long-term Goals
+
+Add other, more topic-specific introductions to assist in answering questions from the audience. e.g. "Analysis in 5 Minutes."
+
+## Contribution
+
+If you are running an ElasticSearch Usergroup, consider using this presentation for introducing newcomers to ElasticSearch and improve it through pull requests.
+
+If you want to collaborate more often, just file an issue for giving you commit access.
+
+## License
+
+This presentation is subject to the Creative Commons Attribution 4.0 International  http://creativecommons.org/licenses/by/4.0/ unless otherwise noted (e.g. pictures).
+
+Shower and Jekyller components are MIT.
 
 ## Install
 
