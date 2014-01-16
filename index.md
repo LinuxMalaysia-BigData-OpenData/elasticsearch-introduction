@@ -44,10 +44,12 @@ style: |
 
 ## Quickstart
 
-    $ curl https://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-0.90.10.zip
-    $ unzip elasticsearch-0.90.10.zip
-    $ cd elasticsearch-0.90.10
-    $ bin/elasticsearch -f
+~~~sh
+$ curl https://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-0.90.10.zip
+$ unzip elasticsearch-0.90.10.zip
+$ cd elasticsearch-0.90.10
+$ bin/elasticsearch -f
+~~~
 
 ## Welcome
 
@@ -56,14 +58,16 @@ style: |
 
 ## Your First Data
 
-    {
-      "id": 123,
-      "name": "Florian Gilcher",
-      "place": "Berlin",
-      "birthdate": "1983-10-04T00:00:00+01:00",
-      "interests": ["code", "data", "elasticsearch"],
-      "age": 30
-    }
+~~~json
+{
+  "id": 123,
+  "name": "Florian Gilcher",
+  "place": "Berlin",
+  "birthdate": "1983-10-04T00:00:00+01:00",
+  "interests": ["code", "data", "elasticsearch"],
+  "age": 30
+}
+~~~
 
 ## What can I put in there?
 
@@ -79,9 +83,11 @@ ElasticSearch handles:
 
 Let's put the stuff in the database.
 
-    $ export $HOST=http://localhost:9200
-    $ curl -XPOST $HOST/my_index/person/123 -d @person.json
-    {"ok":true,"_index":"my_index","_type":"person","_id":"123","_version":1}
+~~~sh
+$ export $HOST=http://localhost:9200
+$ curl -XPOST $HOST/my_index/person/123 -d @person.json
+{"ok":true,"_index":"my_index","_type":"person","_id":"123","_version":1}
+~~~
 
 This operation is part of the [Document API](http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/docs.html) and is called "Index".
 

@@ -19,3 +19,13 @@ author:
 fork_url: https://github.com/skade/elasticsearch-introduction
 progress: true
 line_numbers: true
+
+kramdown:
+  use_coderay: true
+
+  coderay:
+    coderay_wrap: div
+    coderay_line_numbers: inline
+    coderay_tab_width: 4
+    coderay_bold_every: 10
+    coderay_css: class
