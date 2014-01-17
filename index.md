@@ -172,9 +172,6 @@ Distribution works at an index-level by breaking the index into shards and distr
 
 ## Photo Credit
 
-Cover: Bonsai Rock
+Cover: Bonsai Rock, Lake Tahoe
 
 http://www.flickr.com/photos/tensafefrogs/4513403767/
-
-## ![](http://shwr.me/pictures/logo.svg) [See more on GitHub](https://github.com/shower/shower/)
-{:.shout #SeeMore}
