@@ -1,0 +1,15 @@
+.CodeRay pre {
+  white-space: pre;
+}
+
+.CodeRay {
+  font: 20px/2 'Open Sans',sans-serif;
+}
+
+#explanation-index .index {
+  position: absolute;
+  left: 50px;
+  top: 50px;
+  width: 10px;
+  height: 10px;
+}
