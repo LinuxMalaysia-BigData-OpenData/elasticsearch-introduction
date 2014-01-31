@@ -32,17 +32,23 @@ style: |
         }
 ---
 
-# Getting started with ElasticSearch {#Cover}
+# Getting started with Elasticsearch {#Cover}
 
 ![](pictures/cover.jpg)
 
-## What is ElasticSearch?
+## Goal of this presentation
+
+Skim the top of Elasticsearch and give you pointers on where to start and what not to ignore.
+
+## What is Elasticsearch?
 
 * A modern, distributed search engine based on [Apache Lucene](http://lucene.apache.org) using a dynamic data model
 * A distributed aggregation engine
 * A database excelling at unstructured data like text
 
 ## Quickstart
+
+Downloads are found at [http://elasticsearch.org/downloads](http://www.elasticsearch.org/download).
 
 ~~~sh
 $ curl https://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-0.90.10.zip
@@ -91,13 +97,6 @@ $ curl -XPOST $HOST/my_index/person/123 -d @person.json
 
 This operation is part of the [Document API](http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/docs.html) and is called "Index".
 
-<!---<div id="explanation-index">
-  <a href="#index" onclick="$('#index').chardinJs('toggle')">Explanation</a>
-  <div class="index" data-intro="index-test-test-test" data-position="bottom">&nbsp;</div>
-  <div class="type" data-intro="type" data-position="top">&nbsp;</div>
-  <div class="id" data-intro="id" data-position="bottom">&nbsp;</div>
-</div>-->
-
 ##  Retrieval
 
 Here is how we get it back:
@@ -111,11 +110,25 @@ $ curl -XGET $HOST/my_index/person/123
 We can also search for content:
 
 ~~~sh
-$ curl -XGET $HOST/my_index/person/_search?q=florian
-$ curl -XGET $HOST/my_index/_search?q=florian
+$ curl -XGET $HOST/my_index/person/_search?q=florian&pretty
+$ curl -XGET $HOST/my_index/_search?q=florian&pretty
 ~~~
 
 This searches all fields!
+
+## Result
+
+~~~json
+...
+"hits" : [ {
+    "_index" : "test",
+    "_type" : "person",
+    "_id" : "1",
+    "_score" : 1.0,
+    "_source" : {  "id": 123,  "name": "Florian Gilcher",  "place": "Berlin",  "birthdate": "1983-10-04T00:00:00+01:00",  "interests": ["code", "data", "elasticsearch"],  "age": 30}
+  } ]
+...
+~~~
 
 ## Search using the DSL
 
@@ -127,7 +140,7 @@ Beyond debugging, the [Query DSL](http://www.elasticsearch.org/guide/en/elastics
 }
 ~~~
 
-## Queryies and Filters
+## Queries and Filters
 
 Queries can be constraint by filtering the data before running the query:
 
@@ -146,29 +159,175 @@ All results get ranked by a _score_. The _score_ represents how *good* a documen
 * Score of subqueries
 * Custom score boosts configured at search or index time
 
+## Scoring can be influenced
+
+There are multiple queries that can influence scoring.
+
+The get go is the [function_score](http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/query-dsl-function-score-query.html) query that can for example:
+
+* Rate newer documents higher
+* Rate closer geo-points higher
+* Combinations of multiple factors
+
 ## Mappings
 
-Mappings describe how incoming values are stored in the Lucene index.
+[Mappings](http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/mapping.html) describe how incoming values are stored in the Lucene index.
 
-## Analysis 1: Reverse index
+Elasticsearch automatically detects the mapping of newly added types and fields.
 
-Lucene builds a reverse index of your data.
+## Example Mapping
+
+~~~json
+$ curl localhost:9200/test/person/_mapping?pretty
+...
+"person" : {
+  "properties" : {
+    "age" : { "type" : "long" },
+    "birthdate" : { "type" : "date", "format" : "dateOptionalTime" },
+    ...
+    "name" : { "type" : "string" },
+  }
+}
+~~~
 
 ## Analysis
 
 Analysis is the step of breaking text data into terms that can be indexed.
 
+Searches are also analyzed.
+
+## What we end up with
+
+Lucene builds a reverse index of your data.
+
+| keyword        | documents   |
++----------------|-------------|
+| florian        | 1           |
+| gilcher        | 1,2         |
+| felix          | 2           |
+
+## How we get there
+
+| step                 | Input                       | Output              |
++----------------------+-----------------------------|---------------------|
+| Whitespace Tokenizer | "The quick fox"             | "The" "quick" "fox" |
+| lowercase filter     | "The" "quick" "fox"         | "the" "quick" "fox" |
+| stopword filter      | "the" "quick" "fox"         | "quick" "fox"       |
+| synoym   filter      | "quick" "fox"               | "quick" "fast" "fox"|
+
+A match query for `quick`, `fast` or `fox` will find this document.
+
+## Analysis is important!
+
+Getting analysis right is the difference between a good and a bad search.
+
 ## Facets (< 1.0)
 
-Facets are the old-fashioned way of aggregating over the data set.
+[Facets](http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/search-facets-histogram-facet.html) are the old form of aggregating data on elasticsearch.
+
+~~~json
+{
+    "query" : { "match_all" : {} },
+    "facets" : {
+        "sales" : {
+            "date_histogram" : {
+                "field" : "value",
+                "interval" : "day"
+            }
+        }
+    }
+}
+~~~
 
 ## Aggregations (1.0)
 
-Aggregations are the way to do aggregations from ElasticSearch 1.0 on.
+
+Aggregations are split in 2 parts:
+
+* Bucket aggregations (nestable)
+* Metrics aggregations
+
+## Aggregations
+
+~~~json
+{  "aggregations": {
+        "range": {
+            "date_range": {
+                "field": "date",
+                "format": "MM-yyy",
+                "ranges": [ { "to": "now" }, { "from": "now" } ]
+...
+~~~
+
+## Aggregation nesting
+
+~~~json
+{  "aggregations": {
+        "range": { ... },
+        "aggregations": {
+          "monthly" : {
+              "date_histogram" : {
+                  "field" : "date",
+                  "interval" : "1M",
+...
+~~~
+
+## Metrics
+
+~~~json
+{
+    "aggs" : {
+        "min_price" : { "min" : { "field" : "price" } }
+    }
+}
+~~~
+
+Metrics can be used as the last nested aggregation as well.
 
 ## Distribution
 
 Distribution works at an index-level by breaking the index into shards and distributing it over the cluster.
+
+## Node
+
+A node is a running instance of Elasticsearch. A production system should at least consist of 2 nodes.
+
+## Elasticsearch Index
+
+An Index stores documents. It consists of Shards. The "Elasticsearch index" is _not_ a Lucene index.
+
+## Shard / Replica
+
+An index is split into multiple shards (5 per default). For reliability and performance reasons, each shard is copied multiple times. These copies are called "replica".
+
+## Distribution
+
+The shards are distributed using the following strategy:
+
+* All shards need to be present on at least one node
+* All replica are deployed on nodes where no other copy of the shard resides
+
+## What do Replicas give?
+
+Replicas allow two things:
+
+* Failure of nodes - a copy on another shard can take over
+* Speed of search operations: more nodes can participate
+
+## Pitfalls
+
+The main pitfalls when starting Elasticsearch are:
+
+* Ignoring analysis until it is too late
+* Not getting intimate with the query language
+* Not understanding that Elasticsearch is meant to be distributed
+
+## Things to definitely poke around with
+
+* [Kibana](http://kibana.org/), making aggregations easy
+* [Inquisitor](https://github.com/polyfractal/elasticsearch-inquisitor), for developing Analyzers
+* [Marvel](http://www.elasticsearch.com/marvel), Elasticsearchs aggregation tool (commercial)
+* [Logstash](http://logstash.net/), Log analysis, powered by ElasticSearch
 
 ## Photo Credit
 
