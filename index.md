@@ -51,16 +51,16 @@ Skim the top of Elasticsearch and give you pointers on where to start and what n
 Downloads are found at [http://elasticsearch.org/downloads](http://www.elasticsearch.org/download).
 
 ~~~sh
-$ curl https://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-0.90.10.zip
-$ unzip elasticsearch-0.90.10.zip
-$ cd elasticsearch-0.90.10
-$ bin/elasticsearch -f
+$ curl https://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-1.3.0.zip
+$ unzip elasticsearch-1.3.0.zip
+$ cd elasticsearch-1.3.0
+$ bin/elasticsearch
 ~~~
 
 ## Welcome
 
 
-    [Tempus] version[0.90.5], pid[17392], build[c8714e8/2013-09-17T12:50:20Z]
+    [Tempus] version[1.3.0], pid[17392], build[c8714e8/2013-09-17T12:50:20Z]
 
 ## Your First Data
 
@@ -77,7 +77,7 @@ $ bin/elasticsearch -f
 
 ## What can I put in there?
 
-ElasticSearch handles:
+Elasticsearch handles:
 
 * Structured key-value data, with nesting
 * Primitive types: Dates, Numbers, Strings
@@ -151,6 +151,10 @@ Queries can be constraint by filtering the data before running the query:
 }
 ~~~
 
+## Queries and Filters
+
+The query DSL is a tiny programming language in itself and merits learning it properly.
+
 ## Scoring in a nutshell
 
 All results get ranked by a _score_. The _score_ represents how *good* a document matches by:
@@ -221,31 +225,14 @@ A match query for `quick`, `fast` or `fox` will find this document.
 
 Getting analysis right is the difference between a good and a bad search.
 
-## Facets (< 1.0)
-
-[Facets](http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/search-facets-histogram-facet.html) are the old form of aggregating data on elasticsearch.
-
-~~~json
-{
-    "query" : { "match_all" : {} },
-    "facets" : {
-        "sales" : {
-            "date_histogram" : {
-                "field" : "value",
-                "interval" : "day"
-            }
-        }
-    }
-}
-~~~
-
-## Aggregations (1.0)
+## Aggregations
 
 
 Aggregations are split in 2 parts:
 
 * Bucket aggregations (nestable)
 * Metrics aggregations
+* Replaces "Facets" (pre 1.0)
 
 ## Aggregations
 
